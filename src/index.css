@@ -24,10 +24,36 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.background-effect {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  z-index: -1;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  border: 50px solid rgba(20, 151, 151, 0.5);
+  animation: fadeIn 1s ease-out forwards, fadeOut 10s linear forwards;
+  transform: translate(var(--x, 0), var(--y, 0));
+
+  z-index: -1;
+
+  user-select: none;
+}
+
+main {
+  padding: 20px;
 }
 
 h1 {
@@ -52,6 +78,25 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @media (prefers-color-scheme: light) {
