@@ -85,31 +85,13 @@ function Background() {
 
   useEffect(() => {
     if (circles.length === 0) {
-      createCircles();
+      const newCircles = Array.from({ length: circleCount }, (_, i) => i);
+      setCircles(newCircles);
     }
-  }, [circles]);
-
-  function createCircles() {
-    const newCircles = Array.from({ length: circleCount }, (_, i) => ({
-      id: i,
-      moveId: null,
-    }));
-
-    setCircles(newCircles);
-  }
+  }, [circles.length]);
 
   function handleCircleFadeOut(index) {
-    if (index === circles.length - 1) {
-      for (let i = 0; i < circles.length; i++) {
-        const circle = circles[i];
-
-        if (circle.moveId) {
-          cancelAnimationFrame(circles[i].moveId);
-        }
-      }
-
-      setCircles([]);
-    }
+    setCircles(prevCircles => prevCircles.filter(circleIndex => circleIndex !== index));
   }
 
   return (
@@ -118,7 +100,7 @@ function Background() {
         {circles.map((circle, index) => {
           return (
             <Circle
-              key={circle.id}
+              key={index}
               sequentialDelay={sequentialDelay * index}
               onFadeOut={() => handleCircleFadeOut(index)}
             />
