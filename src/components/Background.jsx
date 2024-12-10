@@ -41,21 +41,26 @@ function Circle({ sequentialDelay, onFadeOut }) {
     let x = 0;
     let y = 0;
 
-    (function move() {
-      if (circleRef.current) {
-        x += randomMovement.moveX;
-        y += randomMovement.moveY;
+    function animateCircle() {
+      (function move() {
+        if (circleRef.current) {
+          x += randomMovement.moveX;
+          y += randomMovement.moveY;
 
-        circleRef.current.style.setProperty("--x", `${x}px`);
-        circleRef.current.style.setProperty("--y", `${y}px`);
-      }
+          circleRef.current.style.setProperty("--x", `${x}px`);
+          circleRef.current.style.setProperty("--y", `${y}px`);
+        }
 
-      moveId = requestAnimationFrame(move);
-    })();
+        moveId = requestAnimationFrame(move);
+      })();
 
-    return () => {
-      cancelAnimationFrame(moveId);
-    };
+      return () => {
+        cancelAnimationFrame(moveId);
+      };
+    }
+
+    const cleanup = animateCircle();
+    return cleanup;
   }, [randomMovement.moveX, randomMovement.moveY]);
 
   return (
@@ -68,11 +73,15 @@ function Circle({ sequentialDelay, onFadeOut }) {
         top: `${randomPos.y}px`,
         width: `${randomSize}px`,
         height: `${randomSize}px`,
-        animationDelay: `0s, ${10 + sequentialDelay + 2}s`,
+        animationDelay: `0s, ${15 + sequentialDelay + 2}s`,
         "--x": "0px",
         "--y": "0px",
       }}
-      onAnimationEnd={onFadeOut}
+      onAnimationEnd={(e) => {
+        if (e.animationName === "fadeOut") {
+          onFadeOut();
+        }
+      }}
     ></div>
   );
 }
@@ -85,47 +94,30 @@ function Background() {
 
   useEffect(() => {
     if (circles.length === 0) {
-      createCircles();
+      const newCircles = Array.from({ length: circleCount }, (_, i) => i);
+
+      setCircles(newCircles);
     }
-  }, [circles]);
-
-  function createCircles() {
-    const newCircles = Array.from({ length: circleCount }, (_, i) => ({
-      id: i,
-      moveId: null,
-    }));
-
-    setCircles(newCircles);
-  }
+  }, [circles.length]);
 
   function handleCircleFadeOut(index) {
     if (index === circles.length - 1) {
-      for (let i = 0; i < circles.length; i++) {
-        const circle = circles[i];
-
-        if (circle.moveId) {
-          cancelAnimationFrame(circles[i].moveId);
-        }
-      }
-
       setCircles([]);
     }
   }
 
   return (
-    <>
-      <div className="background-effect">
-        {circles.map((circle, index) => {
-          return (
-            <Circle
-              key={circle.id}
-              sequentialDelay={sequentialDelay * index}
-              onFadeOut={() => handleCircleFadeOut(index)}
-            />
-          );
-        })}
-      </div>
-    </>
+    <div className="background-effect">
+      {circles.map((_, index) => {
+        return (
+          <Circle
+            key={index}
+            sequentialDelay={sequentialDelay * index}
+            onFadeOut={() => handleCircleFadeOut(index)}
+          />
+        );
+      })}
+    </div>
   );
 }
 
