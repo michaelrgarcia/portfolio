@@ -73,7 +73,7 @@ function Circle({ sequentialDelay, onFadeOut }) {
         top: `${randomPos.y}px`,
         width: `${randomSize}px`,
         height: `${randomSize}px`,
-        animationDelay: `0s, ${15 + sequentialDelay + 2}s`,
+        animationDelay: `0s, ${10 + sequentialDelay + 3}s`,
         "--x": "0px",
         "--y": "0px",
       }}

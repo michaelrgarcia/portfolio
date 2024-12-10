@@ -43,7 +43,7 @@ body {
   border-radius: 50%;
   opacity: 0;
   border: 50px solid rgba(20, 151, 151, 0.5);
-  animation: fadeIn 1s ease-out forwards, fadeOut 10s linear forwards;
+  animation: fadeIn 1s ease-out forwards, fadeOut 15s linear forwards;
   transform: translate(var(--x, 0), var(--y, 0));
 
   z-index: -1;
