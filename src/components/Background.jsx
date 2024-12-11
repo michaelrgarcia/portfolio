@@ -1,21 +1,29 @@
 import { useEffect, useState, useRef } from "react";
 import "../styles/Background.css";
 
+// Body overflow will be hidden.
+
 function Circle({ sequentialDelay, onFadeOut }) {
+  const smallSize = 350;
+  const largeSize = 600;
   const circleRef = useRef(null);
 
   function getRandomPosition() {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const maxDistanceFromCenter = 500;
+
     return {
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
+      x: centerX + (Math.random() * 2 - 1) * maxDistanceFromCenter,
+      y: centerY + (Math.random() * 2 - 1) * maxDistanceFromCenter,
     };
   }
 
   function getRandomSize() {
     if (Math.random() > 0.5) {
-      return 500;
+      return smallSize;
     } else {
-      return 900;
+      return largeSize;
     }
   }
 
@@ -31,9 +39,11 @@ function Circle({ sequentialDelay, onFadeOut }) {
   const randomMovement = getRandomMovement();
 
   let color = "rgba(0, 150, 255, 0.5)";
+  let thickness = "50px";
 
-  if (randomSize === 500) {
+  if (randomSize === smallSize) {
     color = "rgba(20, 151, 151, 0.5)";
+    thickness = "35px";
   }
 
   useEffect(() => {
@@ -69,6 +79,7 @@ function Circle({ sequentialDelay, onFadeOut }) {
       ref={circleRef}
       style={{
         borderColor: color,
+        borderWidth: thickness,
         left: `${randomPos.x}px`,
         top: `${randomPos.y}px`,
         width: `${randomSize}px`,
